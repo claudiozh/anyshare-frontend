@@ -63,7 +63,6 @@ export default function Content() {
   };
 
   useEffect(() => {
-    console.log('API: ', import.meta.env.VITE_BASE_URL_API);
     handleOnEvents();
     handleConnect();
 
