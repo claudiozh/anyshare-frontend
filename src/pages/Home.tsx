@@ -8,8 +8,8 @@ import {
   TextField,
   Typography,
   Stack,
-  experimental_sx as sx,
   ContainerProps,
+  Paper,
 } from '@mui/material';
 import backgroundImage from '@src/assets/bg-home.svg';
 import Header from '@src/components/Header';
@@ -23,13 +23,12 @@ const validationSchema = yup.object({
     .max(50, 'Campo deve ter no máximo $max caracteres'),
 });
 
-const StyledBox = styled(Box)<BoxProps>(({ theme }) => ({
+const StyledBox = styled(Box)<BoxProps>(() => ({
   minHeight: '100vh',
   backgroundImage: `url('${backgroundImage}')`,
   backgroundRepeat: 'no-repeat',
   backgroundPosition: 'center top',
   backgroundSize: '100% auto',
-  backgroundColor: `${theme.palette.primary.main}`,
   display: 'flex',
   flexDirection: 'column',
 }));
@@ -39,19 +38,6 @@ const StyledContainer = styled(Container)<ContainerProps>(() => ({
   alignItems: 'center',
   justifyContent: 'center',
 }));
-
-const StyledButton = styled(Button)(
-  sx({
-    mt: 2,
-    px: 3,
-    py: 1.2,
-    borderRadius: 2,
-    backgroundColor: 'secondary.main',
-    '&:hover': {
-      backgroundColor: 'secondary.main',
-    },
-  }),
-);
 
 export default function Content() {
   const navigate = useNavigate();
@@ -77,40 +63,34 @@ export default function Content() {
               <Typography
                 variant="h4"
                 fontWeight="bold"
-                mb={3}
                 color="text.secondary"
+                mb={3}
               >
                 Compartilhe códigos, comandos ou qualquer tipo de texto em tempo real.
               </Typography>
 
               <Stack spacing={2}>
-                <Typography variant="h5" color="text.primary">
+                <Typography variant="h5">
                   Não faça login. Basta usar uma URL
                 </Typography>
 
-                <Typography variant="h5" color="text.primary">
+                <Typography variant="h5">
                   Não salve, o texto é salvo automaticamente
                 </Typography>
 
-                <Typography variant="h5" color="text.primary">
+                <Typography variant="h5">
                   Compartilhe e edite online com seus amigos
                 </Typography>
               </Stack>
             </Grid>
 
             <Grid item xs={6} display="flex">
-              <Box
-                flex={1}
-                bgcolor="primary.dark"
-                boxShadow="0px 8px 24px 0px #00000026"
-                borderRadius={2}
-                p={3}
-              >
+              <Paper sx={{ flex: 1, p: 3 }}>
                 <Stack spacing={1}>
                   <Typography color="text.secondary" variant="h5">
                     Vamos lá
                   </Typography>
-                  <Typography color="text.primary">Entre com um nome</Typography>
+                  <Typography>Entre com um nome</Typography>
                 </Stack>
 
                 <Box mt={4} component="form" onSubmit={formik.handleSubmit}>
@@ -130,11 +110,11 @@ export default function Content() {
                     error={formik.touched.nome && Boolean(formik.errors.nome)}
                   />
 
-                  <StyledButton variant="contained" type="submit">
+                  <Button variant="contained" type="submit" sx={{ mt: 2 }}>
                     Iniciar
-                  </StyledButton>
+                  </Button>
                 </Box>
-              </Box>
+              </Paper>
             </Grid>
           </Grid>
         </Fade>

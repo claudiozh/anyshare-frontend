@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme, experimental_sx as sx } from '@mui/material/styles';
 
 const theme = createTheme({
   typography: {
@@ -14,8 +14,7 @@ const theme = createTheme({
   },
   palette: {
     primary: {
-      main: '#1E2E3D',
-      dark: '#273444',
+      main: '#5150FF',
     },
     text: {
       primary: '#828FA1',
@@ -23,9 +22,11 @@ const theme = createTheme({
     },
     secondary: {
       main: '#5150FF',
+      dark: '#1E2835',
     },
     background: {
       default: '#1E2E3D',
+      paper: '#273444',
     },
   },
   components: {
@@ -47,31 +48,41 @@ const theme = createTheme({
     },
     MuiInputBase: {
       styleOverrides: {
-        root: {
-          border: '1px solid #273444',
-          backgroundColor: '#1E2835',
-        },
+        root: ({ theme: th }) => ({
+          border: `1px solid ${th.palette.background.paper}`,
+          backgroundColor: th.palette.secondary.dark,
+        }),
       },
     },
     MuiOutlinedInput: {
       styleOverrides: {
-        root: {
+        root: ({ theme: th }) => ({
           outline: 'none',
           borderRadius: 8,
           '&.Mui-focused': {
-            border: '1px solid #5150FF',
+            border: `1px solid ${th.palette.primary.main}`,
           },
           '&.Mui-focused fieldset': {
             border: 'none',
           },
-        },
+        }),
       },
     },
-    MuiInputLabel: {
+    MuiButton: {
       styleOverrides: {
-        root: {
-          color: '#869AB8',
-        },
+        root: sx({
+          px: 3,
+          py: 1.2,
+          borderRadius: 2,
+        }),
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: sx({
+          boxShadow: '0px 8px 24px 0px #00000026',
+          borderRadius: 2,
+        }),
       },
     },
   },
