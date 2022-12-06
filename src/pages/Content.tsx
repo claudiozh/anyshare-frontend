@@ -103,12 +103,12 @@ export default function Content() {
 
   return (
     <Box component="main">
-      {isLoading
-        ? <LinearProgress />
+      {disconnected
+        ? <Error />
         : (
           <span>
-            {disconnected ? (
-              <Error />
+            {isLoading ? (
+              <LinearProgress />
             ) : (
               <Box
                 sx={{
