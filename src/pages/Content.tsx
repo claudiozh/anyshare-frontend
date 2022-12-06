@@ -1,5 +1,6 @@
 import {
   Box,
+  LinearProgress,
   Paper,
   TextareaAutosize,
   Typography,
@@ -19,6 +20,7 @@ const socket = io(import.meta.env.VITE_BASE_URL_API, {
 });
 
 export default function Content() {
+  const [isLoading, setIsLoading] = useState(true);
   const [disconnected, setDisconnected] = useState(false);
   const params = useParams();
   const path = params['*'];
@@ -78,9 +80,17 @@ export default function Content() {
     socket.disconnect();
   };
 
+  const findContent = () => {
+    socket.emit('find-content', { room: path }, (response: { content: string }) => {
+      setContent(response?.content);
+      setIsLoading(false);
+    });
+  };
+
   useEffect(() => {
     handleOnEvents();
     handleConnect();
+    findContent();
 
     return () => {
       handleOffEvents();
@@ -93,61 +103,67 @@ export default function Content() {
 
   return (
     <Box component="main">
-      {disconnected ? (
-        <Error />
-      ) : (
-        <Box
-          sx={{
-            position: 'fixed',
-            height: '100%',
-            display: 'flex',
-          }}
-        >
-          <TextareaAutosize
-            autoCapitalize="off"
-            autoComplete="off"
-            value={content || ''}
-            onChange={handleChangeContent}
-            placeholder="Digite aqui..."
-            spellCheck={false}
-            autoFocus
-            style={{
-              fontSize: '16px',
-              height: '100vh',
-              width: '100vw',
-              overflowY: 'auto',
-              background: '#1E2835',
-              color: '#828FA1',
-              outline: 'none',
-              border: 'none',
-              padding: '15px',
-              paddingBottom: '80px',
-              fontWeight: 'bold',
-              overflow: 'auto',
-              resize: 'none',
-            }}
-          />
+      {isLoading
+        ? <LinearProgress />
+        : (
+          <span>
+            {disconnected ? (
+              <Error />
+            ) : (
+              <Box
+                sx={{
+                  position: 'fixed',
+                  height: '100%',
+                  display: 'flex',
+                }}
+              >
+                <TextareaAutosize
+                  autoCapitalize="off"
+                  autoComplete="off"
+                  value={content || ''}
+                  onChange={handleChangeContent}
+                  placeholder="Digite aqui..."
+                  spellCheck={false}
+                  autoFocus
+                  style={{
+                    fontSize: '16px',
+                    height: '100vh',
+                    width: '100vw',
+                    overflowY: 'auto',
+                    background: '#1E2835',
+                    color: '#828FA1',
+                    outline: 'none',
+                    border: 'none',
+                    padding: '15px',
+                    paddingBottom: '80px',
+                    fontWeight: 'bold',
+                    overflow: 'auto',
+                    resize: 'none',
+                  }}
+                />
 
-          <Paper sx={{
-            position: 'absolute',
-            bottom: 28,
-            right: 100,
-            px: 2,
-            py: 1,
-            borderRadius: 2,
-            maxWidth: {
-              xs: 250,
-              sm: 400,
-            },
-          }}
-          >
-            <Typography noWrap>
-              {path}
-            </Typography>
-          </Paper>
-          <FabButton contentCopy={content} handleClear={handleClearContent} />
-        </Box>
-      )}
+                <Paper sx={{
+                  position: 'absolute',
+                  bottom: 28,
+                  right: 100,
+                  px: 2,
+                  py: 1,
+                  borderRadius: 2,
+                  maxWidth: {
+                    xs: 250,
+                    sm: 400,
+                  },
+                }}
+                >
+                  <Typography noWrap>
+                    {path}
+                  </Typography>
+                </Paper>
+                <FabButton contentCopy={content} handleClear={handleClearContent} />
+              </Box>
+            )}
+          </span>
+        )}
     </Box>
   );
 }
